@@ -1,6 +1,18 @@
-node_modules/
-dist/
-release/
-.vite/
-*.log
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+
+# CocoaPods
+Pods/
+
+# 本脚本自身
+upload_to_github.sh

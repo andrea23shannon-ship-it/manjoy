@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>LyricsCaster需要使用本地网络来连接歌手手机，接收实时歌词数据</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_lyricscaster._tcp</string>
+		<string>_lyricscaster._udp</string>
+	</array>
+</dict>
+</plist>

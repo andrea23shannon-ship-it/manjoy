@@ -1,0 +1,322 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AA2B3C4D5E6F7A8B9C0D1E01 /* LyricsSingerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2B3C4D5E6F7A8B9C0D1E01 /* LyricsSingerApp.swift */; };
+		AA2B3C4D5E6F7A8B9C0D1E02 /* LyricsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2B3C4D5E6F7A8B9C0D1E02 /* LyricsModels.swift */; };
+		AA2B3C4D5E6F7A8B9C0D1E03 /* MultipeerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2B3C4D5E6F7A8B9C0D1E03 /* MultipeerClient.swift */; };
+		AA2B3C4D5E6F7A8B9C0D1E04 /* LyricsSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2B3C4D5E6F7A8B9C0D1E04 /* LyricsSearchService.swift */; };
+		AA2B3C4D5E6F7A8B9C0D1E05 /* SongSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2B3C4D5E6F7A8B9C0D1E05 /* SongSearchView.swift */; };
+		AA2B3C4D5E6F7A8B9C0D1E06 /* SingerLyricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2B3C4D5E6F7A8B9C0D1E06 /* SingerLyricsView.swift */; };
+		AA2B3C4D5E6F7A8B9C0D1E07 /* ConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2B3C4D5E6F7A8B9C0D1E07 /* ConnectionView.swift */; };
+		AA2B3C4D5E6F7A8B9C0D1E08 /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2B3C4D5E6F7A8B9C0D1E08 /* MultipeerConnectivity.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		BB2B3C4D5E6F7A8B9C0D1E01 /* LyricsSingerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsSingerApp.swift; sourceTree = "<group>"; };
+		BB2B3C4D5E6F7A8B9C0D1E02 /* LyricsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsModels.swift; sourceTree = "<group>"; };
+		BB2B3C4D5E6F7A8B9C0D1E03 /* MultipeerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerClient.swift; sourceTree = "<group>"; };
+		BB2B3C4D5E6F7A8B9C0D1E04 /* LyricsSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsSearchService.swift; sourceTree = "<group>"; };
+		BB2B3C4D5E6F7A8B9C0D1E05 /* SongSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongSearchView.swift; sourceTree = "<group>"; };
+		BB2B3C4D5E6F7A8B9C0D1E06 /* SingerLyricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingerLyricsView.swift; sourceTree = "<group>"; };
+		BB2B3C4D5E6F7A8B9C0D1E07 /* ConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionView.swift; sourceTree = "<group>"; };
+		BB2B3C4D5E6F7A8B9C0D1E08 /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
+		BB2B3C4D5E6F7A8B9C0D1E09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BB2B3C4D5E6F7A8B9C0D1E99 /* LyricsSinger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LyricsSinger.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CC2B3C4D5E6F7A8B9C0D1E01 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA2B3C4D5E6F7A8B9C0D1E08 /* MultipeerConnectivity.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DD2B3C4D5E6F7A8B9C0D1E01 = {
+			isa = PBXGroup;
+			children = (
+				DD2B3C4D5E6F7A8B9C0D1E02 /* LyricsSinger */,
+				DD2B3C4D5E6F7A8B9C0D1E06 /* Products */,
+				DD2B3C4D5E6F7A8B9C0D1E07 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		DD2B3C4D5E6F7A8B9C0D1E02 /* LyricsSinger */ = {
+			isa = PBXGroup;
+			children = (
+				BB2B3C4D5E6F7A8B9C0D1E01 /* LyricsSingerApp.swift */,
+				DD2B3C4D5E6F7A8B9C0D1E03 /* Models */,
+				DD2B3C4D5E6F7A8B9C0D1E04 /* Services */,
+				DD2B3C4D5E6F7A8B9C0D1E05 /* Views */,
+				BB2B3C4D5E6F7A8B9C0D1E09 /* Info.plist */,
+			);
+			path = LyricsSinger;
+			sourceTree = "<group>";
+		};
+		DD2B3C4D5E6F7A8B9C0D1E03 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BB2B3C4D5E6F7A8B9C0D1E02 /* LyricsModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DD2B3C4D5E6F7A8B9C0D1E04 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				BB2B3C4D5E6F7A8B9C0D1E03 /* MultipeerClient.swift */,
+				BB2B3C4D5E6F7A8B9C0D1E04 /* LyricsSearchService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		DD2B3C4D5E6F7A8B9C0D1E05 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BB2B3C4D5E6F7A8B9C0D1E05 /* SongSearchView.swift */,
+				BB2B3C4D5E6F7A8B9C0D1E06 /* SingerLyricsView.swift */,
+				BB2B3C4D5E6F7A8B9C0D1E07 /* ConnectionView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		DD2B3C4D5E6F7A8B9C0D1E06 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BB2B3C4D5E6F7A8B9C0D1E99 /* LyricsSinger.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DD2B3C4D5E6F7A8B9C0D1E07 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BB2B3C4D5E6F7A8B9C0D1E08 /* MultipeerConnectivity.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		EE2B3C4D5E6F7A8B9C0D1E01 /* LyricsSinger */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF2B3C4D5E6F7A8B9C0D1E03 /* Build configuration list for PBXNativeTarget "LyricsSinger" */;
+			buildPhases = (
+				CC2B3C4D5E6F7A8B9C0D1E02 /* Sources */,
+				CC2B3C4D5E6F7A8B9C0D1E01 /* Frameworks */,
+				CC2B3C4D5E6F7A8B9C0D1E03 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LyricsSinger;
+			productName = LyricsSinger;
+			productReference = BB2B3C4D5E6F7A8B9C0D1E99 /* LyricsSinger.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EE2B3C4D5E6F7A8B9C0D1E02 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					EE2B3C4D5E6F7A8B9C0D1E01 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = FF2B3C4D5E6F7A8B9C0D1E01 /* Build configuration list for PBXProject "LyricsSinger" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DD2B3C4D5E6F7A8B9C0D1E01;
+			productRefGroup = DD2B3C4D5E6F7A8B9C0D1E06 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EE2B3C4D5E6F7A8B9C0D1E01 /* LyricsSinger */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CC2B3C4D5E6F7A8B9C0D1E03 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CC2B3C4D5E6F7A8B9C0D1E02 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA2B3C4D5E6F7A8B9C0D1E01 /* LyricsSingerApp.swift in Sources */,
+				AA2B3C4D5E6F7A8B9C0D1E02 /* LyricsModels.swift in Sources */,
+				AA2B3C4D5E6F7A8B9C0D1E03 /* MultipeerClient.swift in Sources */,
+				AA2B3C4D5E6F7A8B9C0D1E04 /* LyricsSearchService.swift in Sources */,
+				AA2B3C4D5E6F7A8B9C0D1E05 /* SongSearchView.swift in Sources */,
+				AA2B3C4D5E6F7A8B9C0D1E06 /* SingerLyricsView.swift in Sources */,
+				AA2B3C4D5E6F7A8B9C0D1E07 /* ConnectionView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AB2B3C4D5E6F7A8B9C0D1E01 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		AB2B3C4D5E6F7A8B9C0D1E02 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AB2B3C4D5E6F7A8B9C0D1E03 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3834U4YH2R;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LyricsSinger/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LyricsSinger;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyricscaster.singer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		AB2B3C4D5E6F7A8B9C0D1E04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3834U4YH2R;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LyricsSinger/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LyricsSinger;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lyricscaster.singer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FF2B3C4D5E6F7A8B9C0D1E01 /* Build configuration list for PBXProject "LyricsSinger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB2B3C4D5E6F7A8B9C0D1E01 /* Debug */,
+				AB2B3C4D5E6F7A8B9C0D1E02 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF2B3C4D5E6F7A8B9C0D1E03 /* Build configuration list for PBXNativeTarget "LyricsSinger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB2B3C4D5E6F7A8B9C0D1E03 /* Debug */,
+				AB2B3C4D5E6F7A8B9C0D1E04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EE2B3C4D5E6F7A8B9C0D1E02 /* Project object */;
+}
