@@ -16,6 +16,7 @@ import { BonjourService } from './BonjourService';
 import { ScreenManager } from './ScreenManager';
 import { PeerMessage } from '../shared/types';
 import fs from 'fs';
+import os from 'os';
 
 // Initialize persistent storage
 const store = new Store<{
@@ -231,6 +232,25 @@ function setupIpcHandlers(): void {
     };
   });
 
+  // Get network info for diagnostics
+  ipcMain.handle('get-network-info', async () => {
+    const interfaces = os.networkInterfaces();
+    const ips: string[] = [];
+    for (const name in interfaces) {
+      for (const iface of interfaces[name] || []) {
+        if (iface.family === 'IPv4' && !iface.internal) {
+          ips.push(iface.address);
+        }
+      }
+    }
+    return {
+      localIPs: ips,
+      port: 9600,
+      bonjourActive: bonjourService?.isActive() || false,
+      wsRunning: wsServer !== null,
+    };
+  });
+
   // Stop WebSocket server
   ipcMain.handle(IPC_CHANNELS.STOP_SERVER, async () => {
     if (wsServer) {
@@ -401,6 +421,34 @@ app.on('ready', () => {
   // Auto-start server on app launch
   initializeWebSocketServer();
   initializeBonjourService();
+
+  // On Windows, try to add firewall rule (requires admin, may fail silently)
+  if (process.platform === 'win32') {
+    const { exec } = require('child_process');
+    const appPath = app.getPath('exe');
+    // Add inbound rule for the app
+    exec(
+      `netsh advfirewall firewall add rule name="LyricsCaster" dir=in action=allow program="${appPath}" enable=yes profile=any`,
+      (error: any) => {
+        if (error) {
+          console.log('[Firewall] Could not auto-add rule (may need admin rights):', error.message);
+        } else {
+          console.log('[Firewall] Firewall rule added for LyricsCaster');
+        }
+      }
+    );
+    // Also add rule for port 9600
+    exec(
+      `netsh advfirewall firewall add rule name="LyricsCaster Port 9600" dir=in action=allow protocol=tcp localport=9600 enable=yes profile=any`,
+      (error: any) => {
+        if (error) {
+          console.log('[Firewall] Could not auto-add port rule:', error.message);
+        } else {
+          console.log('[Firewall] Port 9600 firewall rule added');
+        }
+      }
+    );
+  }
 });
 
 /**

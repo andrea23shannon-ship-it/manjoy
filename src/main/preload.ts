@@ -28,6 +28,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   startServer: () => ipcRenderer.invoke(IPC.START_SERVER),
   stopServer: () => ipcRenderer.invoke(IPC.STOP_SERVER),
   getServerStatus: () => ipcRenderer.invoke('get-server-status'),
+  getNetworkInfo: () => ipcRenderer.invoke('get-network-info'),
 
   // 投影控制
   startProjection: (screenIndex: number) => ipcRenderer.invoke(IPC.START_PROJECTION, screenIndex),

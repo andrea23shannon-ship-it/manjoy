@@ -256,6 +256,17 @@ export default function MainControlView() {
   const [activeTab, setActiveTab] = useState<TabType>('投影预览');
   const [showStyleEditor, setShowStyleEditor] = useState(false);
   const [showStandbyManager, setShowStandbyManager] = useState(false);
+  const [networkInfo, setNetworkInfo] = useState<{ localIPs: string[]; port: number; bonjourActive: boolean } | null>(null);
+
+  // Load network info on mount
+  useEffect(() => {
+    const api = (window as any).electronAPI;
+    if (api?.getNetworkInfo) {
+      api.getNetworkInfo().then((info: any) => {
+        setNetworkInfo(info);
+      });
+    }
+  }, []);
 
   const handleStartServer = useCallback(async () => {
     if (window.electronAPI?.startServer) {
@@ -317,14 +328,37 @@ export default function MainControlView() {
             </div>
           </div>
           <button
-            style={styles.button}
+            style={{
+              ...styles.button,
+              ...(state.isServerRunning ? { backgroundColor: '#4CAF50', cursor: 'default' } : {}),
+            }}
             onClick={handleStartServer}
             disabled={state.isServerRunning}
             title={state.isServerRunning ? '服务器已运行' : '启动服务器'}
           >
-            {state.isServerRunning ? '服务器运行中' : '启动服务器'}
+            {state.isServerRunning ? '服务运行中' : '启动服务'}
           </button>
         </div>
+
+        {/* Network Info Card */}
+        {networkInfo && networkInfo.localIPs.length > 0 && (
+          <div style={{ ...styles.card, backgroundColor: '#e8f5e9', borderColor: '#a5d6a7' }}>
+            <div>
+              <div style={{ fontSize: '12px', color: '#388e3c' }}>本机地址 (手机需在同一WiFi)</div>
+              <div style={{ fontWeight: 'bold' as const, fontSize: '13px' }}>
+                {networkInfo.localIPs.map((ip, i) => (
+                  <span key={i}>
+                    {i > 0 && ' / '}
+                    ws://{ip}:{networkInfo.port}
+                  </span>
+                ))}
+              </div>
+              <div style={{ fontSize: '11px', color: '#666', marginTop: '2px' }}>
+                Bonjour: {networkInfo.bonjourActive ? '已广播' : '未启动'}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Projector Status Card */}
         <div style={styles.card}>
