@@ -13,9 +13,11 @@ export class ScreenManager {
     const displays = screen.getAllDisplays();
     const primaryDisplay = screen.getPrimaryDisplay();
 
-    return displays.map((display) => ({
+    return displays.map((display, index) => ({
       id: display.id,
-      label: `Display ${display.id}`,
+      label: display.id === primaryDisplay.id
+        ? `主屏幕 (${display.bounds.width}x${display.bounds.height})`
+        : `副屏幕${displays.filter(d => d.id !== primaryDisplay.id).length > 1 ? ` ${index}` : ''} (${display.bounds.width}x${display.bounds.height})`,
       bounds: {
         x: display.bounds.x,
         y: display.bounds.y,

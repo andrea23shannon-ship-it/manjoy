@@ -90,8 +90,13 @@ function createProjectionWindow(displayId: number): void {
   const displays = screen.getAllDisplays();
   const targetDisplay = displays.find((d) => d.id === displayId);
 
+  console.log(`[Projection] Requested display ID: ${displayId}`);
+  console.log(`[Projection] Available displays:`, displays.map(d => ({
+    id: d.id, bounds: d.bounds, isPrimary: d.id === screen.getPrimaryDisplay().id
+  })));
+
   if (!targetDisplay) {
-    console.error(`Display with ID ${displayId} not found`);
+    console.error(`[Projection] Display with ID ${displayId} not found`);
     return;
   }
 
@@ -100,9 +105,13 @@ function createProjectionWindow(displayId: number): void {
     y: targetDisplay.bounds.y,
     width: targetDisplay.bounds.width,
     height: targetDisplay.bounds.height,
-    fullscreen: true,
+    fullscreen: false,
+    fullscreenable: true,
     frame: false,
-    alwaysOnTop: false,
+    alwaysOnTop: true,
+    skipTaskbar: true,
+    resizable: false,
+    movable: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -110,6 +119,11 @@ function createProjectionWindow(displayId: number): void {
       sandbox: true,
     },
   });
+
+  // On Windows, use setBounds + simpleFullscreen instead of fullscreen
+  // to ensure the window appears on the correct display
+  projectionWindow.setBounds(targetDisplay.bounds);
+  projectionWindow.setSimpleFullScreen(true);
 
   const projectionUrl = isDev
     ? 'http://localhost:5173/projection.html'
