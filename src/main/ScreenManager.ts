@@ -1,28 +1,5 @@
 import { screen } from 'electron';
-
-/**
- * Screen information object
- */
-export interface ScreenInfo {
-  id: number;
-  label: string;
-  bounds: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
-  workArea: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
-  scaleFactor: number;
-  isPrimary: boolean;
-  isExternal: boolean;
-  rotation: number;
-}
+import { ScreenInfo } from '../shared/types';
 
 /**
  * Screen manager for detecting and managing displays

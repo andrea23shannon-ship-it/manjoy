@@ -45,8 +45,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.0
-          name: LyricsCaster Windows v1.0.0
+          tag_name: v1.0.${{ github.run_number }}
+          name: LyricsCaster Windows v1.0.${{ github.run_number }}
           body: |
             ## LyricsCaster 歌词投屏 Windows版
 

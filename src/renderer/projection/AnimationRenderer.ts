@@ -668,9 +668,9 @@ export class AnimationRenderer {
     this.ctx.textAlign = align;
     this.ctx.textBaseline = 'middle';
 
-    if (this.style.glowEffect) {
+    if (this.style.currentLineGlow) {
       this.ctx.shadowColor = colorToCSS(color);
-      this.ctx.shadowBlur = this.style.glowSize || 10;
+      this.ctx.shadowBlur = 10;
     }
 
     if (scale !== 1) {
@@ -703,9 +703,9 @@ export class AnimationRenderer {
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'middle';
 
-    if (this.style.glowEffect) {
+    if (this.style.currentLineGlow) {
       this.ctx.shadowColor = colorToCSS(this.style.currentLineColor);
-      this.ctx.shadowBlur = this.style.glowSize || 10;
+      this.ctx.shadowBlur = 10;
     }
 
     const charCount = text.length;
@@ -759,9 +759,9 @@ export class AnimationRenderer {
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'middle';
 
-    if (this.style.glowEffect) {
+    if (this.style.currentLineGlow) {
       this.ctx.shadowColor = colorToCSS(this.style.currentLineColor);
-      this.ctx.shadowBlur = this.style.glowSize || 10;
+      this.ctx.shadowBlur = 10;
     }
 
     const fullTextWidth = this.ctx.measureText(text).width;

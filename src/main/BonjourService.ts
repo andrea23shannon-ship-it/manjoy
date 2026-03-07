@@ -1,4 +1,4 @@
-import bonjour, { Bonjour, Service } from 'bonjour-service';
+import { Bonjour, Service } from 'bonjour-service';
 import { EventEmitter } from 'events';
 
 export interface BonjourDiscoveryInfo {
@@ -23,9 +23,6 @@ export class BonjourService extends EventEmitter {
     this.discoveryInfo = discoveryInfo;
   }
 
-  /**
-   * Start the Bonjour service
-   */
   start(): void {
     if (this.isRunning) {
       console.warn('Bonjour service is already running');
@@ -33,16 +30,13 @@ export class BonjourService extends EventEmitter {
     }
 
     try {
-      // Initialize bonjour instance
-      this.bonjour = bonjour();
+      this.bonjour = new Bonjour();
 
-      // Create service configuration
       this.service = this.bonjour.publish({
         name: 'LyricsCaster',
         type: 'lyricscaster',
         port: this.port,
         protocol: 'tcp',
-        subtypes: ['projector'],
         txt: {
           app: this.discoveryInfo.app,
           role: this.discoveryInfo.role,
@@ -55,7 +49,6 @@ export class BonjourService extends EventEmitter {
         `Bonjour service published: _lyricscaster._tcp on port ${this.port}`
       );
 
-      // Handle service errors
       this.service.on('error', (error: Error) => {
         console.error('Bonjour service error:', error);
         this.emit('error', error);
@@ -66,25 +59,20 @@ export class BonjourService extends EventEmitter {
     }
   }
 
-  /**
-   * Stop the Bonjour service
-   */
   stop(): void {
     if (!this.isRunning) {
-      console.warn('Bonjour service is not running');
       return;
     }
 
     try {
-      // Unpublish service
-      if (this.service) {
-        this.service.stop();
+      if (this.service != null) {
+        const svc: any = this.service;
+        svc.stop();
         this.service = null;
       }
 
-      // Destroy bonjour instance
-      if (this.bonjour) {
-        this.bonjour.destroy();
+      if (this.bonjour != null) {
+        (this.bonjour as Bonjour).destroy();
         this.bonjour = null;
       }
 
@@ -96,50 +84,19 @@ export class BonjourService extends EventEmitter {
     }
   }
 
-  /**
-   * Update service TXT records
-   */
-  updateTxtRecords(txt: Record<string, string>): void {
-    if (!this.service) {
-      console.warn('Service not initialized');
-      return;
-    }
-
-    try {
-      this.service.updateTxt(txt);
-      console.log('Bonjour TXT records updated');
-    } catch (error) {
-      console.error('Failed to update TXT records:', error);
-    }
-  }
-
-  /**
-   * Get service status
-   */
   isActive(): boolean {
     return this.isRunning;
   }
 
-  /**
-   * Cleanup resources
-   */
   private cleanup(): void {
     try {
-      if (this.service) {
-        try {
-          this.service.stop();
-        } catch (e) {
-          // Ignore errors during cleanup
-        }
+      if (this.service != null) {
+        try { const svc: any = this.service; svc.stop(); } catch (_e) { /* ignore */ }
         this.service = null;
       }
 
-      if (this.bonjour) {
-        try {
-          this.bonjour.destroy();
-        } catch (e) {
-          // Ignore errors during cleanup
-        }
+      if (this.bonjour != null) {
+        try { (this.bonjour as Bonjour).destroy(); } catch (_e) { /* ignore */ }
         this.bonjour = null;
       }
 

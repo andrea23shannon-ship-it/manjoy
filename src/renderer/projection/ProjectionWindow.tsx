@@ -45,15 +45,12 @@ const ProjectionWindow: React.FC = () => {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Start animation loop
-    const animate = () => {
-      renderer.render(canvas.width, canvas.height);
-      requestAnimationFrame(animate);
-    };
-    requestAnimationFrame(animate);
+    // Start animation loop (AnimationRenderer has its own internal loop)
+    renderer.start();
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      renderer.stop();
     };
   }, []);
 
