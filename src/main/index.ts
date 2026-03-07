@@ -213,9 +213,22 @@ function notifyScreensUpdated(): void {
 function setupIpcHandlers(): void {
   // Start WebSocket server
   ipcMain.handle(IPC_CHANNELS.START_SERVER, async () => {
-    initializeWebSocketServer();
-    initializeBonjourService();
-    return { success: true };
+    try {
+      initializeWebSocketServer();
+      initializeBonjourService();
+      return { success: true };
+    } catch (error) {
+      console.error('Failed to start server:', error);
+      return { success: false, error: String(error) };
+    }
+  });
+
+  // Query server status (so renderer can sync on mount)
+  ipcMain.handle('get-server-status', async () => {
+    return {
+      isRunning: wsServer !== null,
+      connectedCount: wsServer?.getConnectedCount() || 0,
+    };
   });
 
   // Stop WebSocket server

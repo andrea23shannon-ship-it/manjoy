@@ -10,12 +10,17 @@ export interface ElectronAPI {
   /**
    * Start the WebSocket server for peer communication
    */
-  startServer(): void;
+  startServer(): Promise<{ success: boolean }>;
 
   /**
    * Stop the WebSocket server
    */
-  stopServer(): void;
+  stopServer(): Promise<{ success: boolean }>;
+
+  /**
+   * Get current server status
+   */
+  getServerStatus(): Promise<{ isRunning: boolean; connectedCount: number }>;
 
   /**
    * Start projection on the specified screen
