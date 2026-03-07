@@ -1,7 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useAppState, useAppDispatch } from '../models/AppState';
 import { formatTime, getVisibleLines, getTotalDuration, getProgressPercentage } from '../models/LyricsModels';
-import { colorToCSS } from '../../shared/types';
+import { colorToCSS, LyricsStyle } from '../../shared/types';
+import StyleEditorView from './StyleEditorView';
+import StandbyImageSheet from './StandbyImageSheet';
 
 // ===== STYLES =====
 const styles = {
@@ -252,12 +254,20 @@ export default function MainControlView() {
   const state = useAppState();
   const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState<TabType>('投影预览');
+  const [showStyleEditor, setShowStyleEditor] = useState(false);
+  const [showStandbyManager, setShowStandbyManager] = useState(false);
 
-  const handleStartServer = useCallback(() => {
+  const handleStartServer = useCallback(async () => {
     if (window.electronAPI?.startServer) {
-      window.electronAPI.startServer();
+      try {
+        await window.electronAPI.startServer();
+        dispatch({ type: 'SET_SERVER_RUNNING', payload: true });
+        dispatch({ type: 'ADD_LOG', payload: { message: '服务器已启动' } });
+      } catch (err) {
+        dispatch({ type: 'ADD_LOG', payload: { message: `启动服务器失败: ${err}` } });
+      }
     }
-  }, []);
+  }, [dispatch]);
 
   const handleStopServer = useCallback(() => {
     if (window.electronAPI?.stopServer) {
@@ -363,18 +373,14 @@ export default function MainControlView() {
         {/* Settings Buttons */}
         <button
           style={styles.button}
-          onClick={() => {
-            // TODO: Open StyleEditorView as modal
-          }}
+          onClick={() => setShowStyleEditor(true)}
         >
           歌词显示设置
         </button>
 
         <button
           style={styles.button}
-          onClick={() => {
-            // TODO: Open StandbyImageSheet as modal
-          }}
+          onClick={() => setShowStandbyManager(true)}
         >
           待机图片管理
         </button>
@@ -533,6 +539,46 @@ export default function MainControlView() {
           )}
         </div>
       </div>
+
+      {/* Style Editor Modal */}
+      {showStyleEditor && (
+        <div style={styles.modalOverlay}>
+          <div style={{ width: '90%', maxWidth: '1200px', height: '90vh', overflow: 'auto', borderRadius: '8px' }}>
+            <StyleEditorView
+              style={state.style}
+              onStyleChange={(newStyle: LyricsStyle) => {
+                dispatch({ type: 'SET_STYLE', payload: newStyle });
+                if (window.electronAPI?.saveStyle) {
+                  window.electronAPI.saveStyle(newStyle);
+                }
+              }}
+              onClose={() => setShowStyleEditor(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Standby Image Manager Modal */}
+      {showStandbyManager && (
+        <StandbyImageSheet
+          standbyGroups={state.standbyGroups}
+          selectedGroupId={state.selectedGroupId}
+          standbyDelay={state.standbyDelay}
+          onGroupsChange={(groups) => {
+            dispatch({ type: 'SET_STANDBY_GROUPS', payload: groups });
+            if (window.electronAPI?.saveStandbyGroups) {
+              window.electronAPI.saveStandbyGroups(groups);
+            }
+          }}
+          onDelayChange={(delay) => {
+            dispatch({ type: 'SET_STANDBY_DELAY', payload: delay });
+          }}
+          onSelectedGroupChange={(id) => {
+            dispatch({ type: 'SET_SELECTED_GROUP', payload: id });
+          }}
+          onClose={() => setShowStandbyManager(false)}
+        />
+      )}
     </div>
   );
 }
