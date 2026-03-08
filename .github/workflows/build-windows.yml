@@ -11,6 +11,9 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: WindowsApp
 
     steps:
       - name: Checkout code
@@ -40,17 +43,25 @@ jobs:
         with:
           name: LyricsCaster-Windows-Setup
           path: |
-            release/*.exe
-            dist/*.exe
+            WindowsApp/release/*.exe
+            WindowsApp/dist/*.exe
           if-no-files-found: warn
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.${{ github.run_number }}
-          name: LyricsCaster Windows v1.0.${{ github.run_number }}
+          tag_name: v1.1.${{ github.run_number }}
+          name: LyricsCaster Windows v1.1.${{ github.run_number }}
           body: |
             ## LyricsCaster 歌词投屏 Windows版
+
+            ### 更新内容
+            - 1:1复刻Mac端所有功能
+            - 新增设置面板（API配置管理、健康检测）
+            - randomSize动画重写（每行放大字+呼吸特效+退场缩回）
+            - charBounce退场散落动画
+            - 字体导入（TTF/OTF）
+            - 背景图片支持
 
             ### 安装方法
             1. 下载下方的 .exe 安装文件
@@ -58,16 +69,9 @@ jobs:
             3. 安装完成后启动 LyricsCaster
             4. 确保手机和电脑在同一个WiFi网络
             5. iOS端会自动发现并连接
-
-            ### 功能
-            - 14种歌词动画效果
-            - 外接屏幕投影
-            - 与iOS LyricsSinger手机端实时同步
-            - 5个主题预设
-            - 待机图片管理
           files: |
-            release/*.exe
-            dist/*.exe
+            WindowsApp/release/*.exe
+            WindowsApp/dist/*.exe
           draft: false
           prerelease: false
         env:
