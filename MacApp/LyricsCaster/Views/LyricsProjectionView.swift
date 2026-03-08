@@ -43,6 +43,8 @@ struct LyricsProjectionView: View {
     @State private var randomSizeExitActive: Bool = false       // 是否正在退场
     @State private var randomSizePreExitStarted: Bool = false  // 是否已触发预退场（lineProgress驱动）
     @State private var randomSizeLineDuration: Double = 3.0    // 当前行时长（秒）
+    @State private var randomSizeBreathe: Bool = false         // 放大字呼吸动画开关
+    @State private var randomSizeBigScale: CGFloat = 1.0       // 放大字缩放（退场时缩回1.0→shrinkRatio）
 
     var body: some View {
         ZStack {
@@ -806,7 +808,7 @@ struct LyricsProjectionView: View {
                             seed: currentIdx,
                             color: style.currentLineColor.color
                         )
-                        .frame(maxWidth: w * 0.92)  // 限制最大宽度为屏幕92%
+                        .frame(width: w * 0.92, height: h * 0.6)
 
                         // 翻译
                         if style.showTranslation, let trans = line.translation, !trans.isEmpty {
@@ -856,6 +858,8 @@ struct LyricsProjectionView: View {
             randomSizeLineScale = 0.3
             randomSizeLineOpacity = 0
             randomSizeLineBlur = 12
+            // 重置放大字缩放（新行的放大字从满比例开始）
+            randomSizeBigScale = 1.0
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.03) {
                 withAnimation(.easeOut(duration: entryDur)) {
@@ -881,6 +885,14 @@ struct LyricsProjectionView: View {
                     randomSizeLineOpacity = 0.3
                     randomSizeLineScale = 0.92
                 }
+                // 放大字缩回普通大小（normalRatio/bigRatio）
+                let fontSize = appState.style.fontSize
+                let bigRatio: CGFloat = fontSize > 100 ? 1.2 : (fontSize > 80 ? 1.5 : (fontSize > 60 ? 1.8 : 2.2))
+                let normalRatio: CGFloat = 0.75
+                let shrinkTarget = normalRatio / bigRatio
+                withAnimation(.easeInOut(duration: exitDur * 1.2)) {
+                    randomSizeBigScale = shrinkTarget
+                }
             }
         }
         .onAppear {
@@ -891,39 +903,42 @@ struct LyricsProjectionView: View {
             if currentIdx >= 0 {
                 randomSizeLineDuration = randomSizeCalcLineDuration(index: currentIdx)
             }
+            // 启动呼吸动画（永久循环）
+            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                randomSizeBreathe = true
+            }
         }
     }
 
-    /// 计算随机大小参数：每个字的 (字号, 是否特大)
-    /// 特大字比例随 baseSize 动态调整，避免大字号时溢出屏幕
-    private func randomSizeParams(count: Int, baseSize: CGFloat, seed: Int) -> [(CGFloat, Bool)] {
-        let bigIdx1 = abs(Int(sin(Double(seed) * 3.7 + 1.2) * Double(count))) % max(1, count)
-        let bigIdx2 = abs(Int(cos(Double(seed) * 2.3 + 0.8) * Double(count))) % max(1, count)
-        let bigIdx3 = abs(Int(sin(Double(seed) * 5.1 + 2.7) * Double(count))) % max(1, count)
-        let hasTwoBig = count > 3
-        let hasThreeBig = count > 6
-        // 特大字比例：更加明显的放大
-        let bigRatioBase: CGFloat = baseSize > 100 ? 1.35 : (baseSize > 60 ? 1.55 : 1.85)
-        let bigRatioRange: CGFloat = baseSize > 100 ? 0.2 : (baseSize > 60 ? 0.3 : 0.45)
-        // 普通字大小固定 1.0
-        let normalMin: CGFloat = 1.0
-        let normalRange: CGFloat = 0.0
+    /// 计算随机大小参数：按分行结果，每行各一个字随机放大，其余统一大小
+    /// segments: 已分行的字符数组，seed: 行号种子，baseSize: 基础字号
+    private func randomSizeParams(segments: [[Character]], baseSize: CGFloat, seed: Int) -> [(CGFloat, Bool)] {
+        // 放大字用大比例，普通字缩小，拉大视觉差距
+        let bigRatio: CGFloat = baseSize > 100 ? 1.6 : (baseSize > 80 ? 1.8 : (baseSize > 60 ? 2.2 : 2.5))
+        let normalRatio: CGFloat = 0.75  // 普通字缩小到75%，与放大字形成强烈对比
         var result: [(CGFloat, Bool)] = []
-        for i in 0..<count {
-            let isBig = i == bigIdx1 || (hasTwoBig && i == bigIdx2) || (hasThreeBig && i == bigIdx3)
-            let ratio: CGFloat = isBig
-                ? bigRatioBase + CGFloat(abs(sin(Double(i) * 2.9 + Double(seed) * 0.7))) * bigRatioRange
-                : normalMin + CGFloat(abs(sin(Double(i) * 1.7 + Double(seed) * 1.3 + 0.5) * cos(Double(i) * 3.1 + Double(seed) * 0.4))) * normalRange
-            result.append((baseSize * ratio, isBig))
+        for (si, segment) in segments.enumerated() {
+            // 每行用不同种子选一个放大字
+            let rowSeed = seed * 7 + si * 3 + 1
+            let bigIdx = abs(Int(sin(Double(rowSeed) * 3.7 + 1.2) * Double(segment.count))) % max(1, segment.count)
+            for ci in 0..<segment.count {
+                let isBig = (ci == bigIdx)
+                let sz = isBig ? baseSize * bigRatio : baseSize * normalRatio
+                result.append((sz, isBig))
+            }
         }
         return result
     }
 
-    /// 随机大小 - 单个字符视图
+    /// 随机大小 - 单个字符视图（放大字带呼吸动画+退场缩回）
     @ViewBuilder
     private func randomSizeCharView(char: Character, fontSize: CGFloat, isBig: Bool, fontName: String, fontWeight: Font.Weight, color: Color, glow: Bool) -> some View {
         let glowRadius: CGFloat = glow ? (isBig ? 20 : 12) : 0
         let glowColor = glow ? color.opacity(0.5) : Color.clear
+        // 呼吸振幅
+        let breatheScale: CGFloat = randomSizeBreathe ? 1.06 : 0.94
+        // 放大字的最终缩放 = 退场缩放 × 呼吸缩放
+        let bigFinalScale: CGFloat = randomSizeBigScale * breatheScale
         Text(String(char))
             .font(.custom(fontName, size: fontSize))
             .fontWeight(isBig ? .heavy : fontWeight)
@@ -931,17 +946,19 @@ struct LyricsProjectionView: View {
             .shadow(color: glowColor, radius: glowRadius)
             .shadow(color: .black.opacity(0.7), radius: 2, x: 2, y: 3)
             .shadow(color: .black.opacity(0.35), radius: 6, x: 3, y: 5)
+            .scaleEffect(isBig ? bigFinalScale : 1.0)
+            .opacity(isBig ? (randomSizeBreathe ? 1.0 : 0.75) : 1.0)
+            .shadow(color: isBig ? color.opacity(randomSizeBreathe ? 0.5 : 0.1) : .clear, radius: isBig ? (randomSizeBreathe ? 12 : 4) : 0)
+            .animation(.easeInOut(duration: 0.6), value: randomSizeBigScale)
     }
 
-    /// 随机大小 - 一行字符
+    /// 随机大小 - 一行字符（中间对齐，只有放大字突出）
     @ViewBuilder
     private func randomSizeRowView(segment: [Character], globalOffset: Int, params: [(CGFloat, Bool)], style: LyricsStyle, color: Color) -> some View {
-        HStack(alignment: .lastTextBaseline, spacing: -1) {
+        HStack(alignment: .center, spacing: 0) {
             ForEach(0..<segment.count, id: \.self) { ci in
                 let gIdx = ci + globalOffset
                 let p = gIdx < params.count ? params[gIdx] : (style.fontSize, false)
-                // 每个字随机上下偏移，打破行内整齐
-                let charYShift = CGFloat(sin(Double(gIdx) * 2.3 + Double(globalOffset) * 1.1 + 0.8)) * style.fontSize * 0.12
                 randomSizeCharView(
                     char: segment[ci],
                     fontSize: p.0,
@@ -951,70 +968,74 @@ struct LyricsProjectionView: View {
                     color: color,
                     glow: style.currentLineGlow
                 )
-                .offset(y: charYShift)
             }
         }
-        .fixedSize(horizontal: false, vertical: true)
     }
 
-    /// 随机大小字体歌词视图 - 每字不同大小，1-2个字特别大
+    /// 随机大小字体歌词视图
+    /// 每行独立计算缩放，用 frame alignment 实现左中右错开，保证不出界
     @ViewBuilder
     private func randomSizeCharsView(chars: [Character], style: LyricsStyle, seed: Int, color: Color) -> some View {
-        let params = randomSizeParams(count: chars.count, baseSize: style.fontSize, seed: seed)
         let segments = randomSizeSplitLine(chars: chars, seed: seed)
+        let params = randomSizeParams(segments: segments, baseSize: style.fontSize, seed: seed)
+        // 交错对齐模式：左、右、中
+        let alignPattern: [Alignment] = [.leading, .trailing, .center, .trailing, .leading, .center]
 
         GeometryReader { geo in
             let w = geo.size.width
-            // 预设交错位置：左-右-中-右-左... 确保相邻行明显错开
-            let slotPattern: [CGFloat] = [0.05, 0.8, 0.4, 0.9, 0.15, 0.7, 0.3, 0.85]
-            VStack(alignment: .leading, spacing: -style.fontSize * 0.2) {
+            let safeW = w * 0.92
+
+            VStack(spacing: -style.fontSize * 0.1) {
                 ForEach(0..<segments.count, id: \.self) { si in
                     let segment = segments[si]
                     let globalOffset = segments[0..<si].reduce(0) { $0 + $1.count }
                     // 估算本行宽度
-                    let rowW: CGFloat = segment.indices.reduce(CGFloat(0)) { acc, ci in
-                        let gIdx = ci + globalOffset
-                        let sz = gIdx < params.count ? params[gIdx].0 : style.fontSize
-                        return acc + sz * 0.85
-                    }
-                    // 可用偏移空间（屏幕宽 - 行宽）
-                    let available = max(0, w - rowW)
-                    // 从交错位置表取值，加 seed 扰动让每句歌词不同
-                    let slotIdx = (si + abs(seed)) % slotPattern.count
-                    let basePos = slotPattern[slotIdx]
-                    let jitter = CGFloat(sin(Double(si + seed) * 3.7 + 1.1)) * 0.1
-                    let pos = min(1.0, max(0.0, basePos + jitter))
+                    let rowW = randomSizeRowWidth(segment: segment, globalOffset: globalOffset, params: params, fontSize: style.fontSize)
+                    // 如果行宽超出安全区域，等比缩小
+                    let scale = rowW > safeW ? safeW / rowW : 1.0
+                    // 对齐方式
+                    let alignIdx = (si + abs(seed)) % alignPattern.count
+                    let align = alignPattern[alignIdx]
+
                     randomSizeRowView(segment: segment, globalOffset: globalOffset, params: params, style: style, color: color)
-                        .offset(x: available * pos)
+                        .scaleEffect(scale, anchor: align == .trailing ? .trailing : (align == .center ? .center : .leading))
+                        .frame(width: safeW, alignment: align)
                 }
             }
-            .frame(maxWidth: w, maxHeight: .infinity, alignment: .leading)
+            .frame(width: w, height: geo.size.height)
         }
     }
 
-    /// 随机大小模式的分行逻辑（根据字号动态调整分行阈值）
+    /// 估算一行的渲染宽度
+    private func randomSizeRowWidth(segment: [Character], globalOffset: Int, params: [(CGFloat, Bool)], fontSize: CGFloat) -> CGFloat {
+        segment.indices.reduce(CGFloat(0)) { acc, ci in
+            let gIdx = ci + globalOffset
+            let sz = gIdx < params.count ? params[gIdx].0 : fontSize
+            return acc + sz
+        }
+    }
+
+    /// 随机大小模式的分行逻辑：简洁版，每行最多放N个字
     private func randomSizeSplitLine(chars: [Character], seed: Int) -> [[Character]] {
         let total = chars.count
-        // 大字号时更积极分行，避免溢出
-        let fontSize = appState.style.fontSize
-        let threshold1 = fontSize > 100 ? 4 : (fontSize > 60 ? 6 : 8)   // 不分行的上限
-        let threshold2 = fontSize > 100 ? 8 : (fontSize > 60 ? 12 : 16) // 分2行的上限
+        guard total > 0 else { return [chars] }
+        // 每行目标字数：5~8个字，让分行效果明显
+        let charsPerRow = max(3, min(8, total / 2 + (abs(seed) % 2)))
+        if total <= charsPerRow { return [chars] }
 
-        if total <= threshold1 { return [chars] }
-        if total <= threshold2 {
-            let mid = total / 2 + (seed % 3 - 1)
-            let safeMid = max(2, min(total - 2, mid))
-            return [Array(chars[0..<safeMid]), Array(chars[safeMid..<total])]
+        var result: [[Character]] = []
+        var start = 0
+        var lineIdx = 0
+        while start < total {
+            // 每行字数加点随机变化（±1）
+            let jitter = (lineIdx == 0) ? 0 : ((seed + lineIdx) % 3 - 1)
+            let count = max(2, charsPerRow + jitter)
+            let end = min(total, start + count)
+            result.append(Array(chars[start..<end]))
+            start = end
+            lineIdx += 1
         }
-        let p1 = total / 3 + (seed % 3 - 1)
-        let p2 = total * 2 / 3 + ((seed + 1) % 3 - 1)
-        let safeP1 = max(2, min(total - 4, p1))
-        let safeP2 = max(safeP1 + 2, min(total - 2, p2))
-        return [
-            Array(chars[0..<safeP1]),
-            Array(chars[safeP1..<safeP2]),
-            Array(chars[safeP2..<total])
-        ]
+        return result
     }
 
     /// 计算指定行的时长（秒），用于动画时间关联

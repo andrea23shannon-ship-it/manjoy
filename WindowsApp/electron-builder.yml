@@ -1,0 +1,25 @@
+appId: com.lyricscaster.windows
+productName: LyricsCaster 歌词投屏
+
+directories:
+  output: release
+  buildResources: build
+
+files:
+  - dist/**/*
+  - node_modules/**/*
+  - "!node_modules/.cache"
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: build/icon.ico
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  shortcutName: LyricsCaster 歌词投屏

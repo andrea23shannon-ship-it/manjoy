@@ -73,13 +73,18 @@ struct SongSearchView: View {
     // MARK: - 搜索栏
     private var searchBar: some View {
         VStack(spacing: 10) {
-            // 音乐源选择
+            // 音乐源选择（切换时自动用当前关键词重新搜索）
             Picker("音乐源", selection: $searchService.selectedSource) {
                 Text("QQ音乐").tag(LyricsSource.qqMusic)
                 Text("网易云").tag(LyricsSource.netease)
                 Text("酷狗").tag(LyricsSource.kugou)
             }
             .pickerStyle(.segmented)
+            .onChange(of: searchService.selectedSource) { _ in
+                if !keyword.trimmingCharacters(in: .whitespaces).isEmpty {
+                    performSearch()
+                }
+            }
 
             // 搜索输入
             HStack(spacing: 10) {
@@ -104,7 +109,7 @@ struct SongSearchView: View {
                 .background(Color(.systemGray6))
                 .cornerRadius(10)
 
-                if !searchService.searchResults.isEmpty || searchService.isSearching {
+                if !searchService.searchResults.isEmpty || searchService.isSearching || searchService.error != nil {
                     Button("取消") { cancelSearch() }
                         .foregroundColor(.secondary)
                 } else {

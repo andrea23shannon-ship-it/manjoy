@@ -12,6 +12,7 @@ struct MainControlView: View {
     @State private var selectedTab = 0
     @State private var showStyleEditor = false
     @State private var showStandbyManager = false
+    @State private var showSettings = false
 
     var body: some View {
         // 主界面全宽布局
@@ -40,6 +41,14 @@ struct MainControlView: View {
                         Label("歌词显示设置", systemImage: "paintbrush")
                     }
                     .help("打开歌词样式设置")
+
+                    Divider()
+
+                    // 设置入口
+                    Button(action: { showSettings = true }) {
+                        Label("设置", systemImage: "gearshape")
+                    }
+                    .help("打开设置")
                 }
             }
             .sheet(isPresented: $showStyleEditor) {
@@ -49,6 +58,11 @@ struct MainControlView: View {
             .sheet(isPresented: $showStandbyManager) {
                 StandbyImageSheet()
                     .environmentObject(appState)
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsSheet()
+                    .environmentObject(apiConfigManager)
+                    .environmentObject(server)
             }
     }
 
@@ -149,11 +163,6 @@ struct MainControlView: View {
             .buttonStyle(.plain)
             .padding(.horizontal)
             .padding(.bottom, 8)
-
-            // API 配置管理卡片
-            apiConfigCard
-                .padding(.horizontal)
-                .padding(.bottom, 8)
 
             Divider()
 
