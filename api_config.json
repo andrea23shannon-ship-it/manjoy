@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-03-08",
+  "apis": {
+    "qqMusic": {
+      "search": {
+        "url": "https://u.y.qq.com/cgi-bin/musicu.fcg",
+        "method": "POST",
+        "headers": {
+          "Content-Type": "application/json",
+          "Referer": "https://y.qq.com"
+        },
+        "module": "music.search.SearchCgiService",
+        "apiMethod": "DoSearchForQQMusicDesktop"
+      },
+      "lyrics": {
+        "url": "https://u.y.qq.com/cgi-bin/musicu.fcg",
+        "method": "POST",
+        "headers": {
+          "Content-Type": "application/json",
+          "Referer": "https://y.qq.com"
+        },
+        "module": "music.musichallSong.PlayLyricInfo",
+        "apiMethod": "GetPlayLyricInfo"
+      },
+      "searchLegacy": {
+        "url": "https://c.y.qq.com/soso/fcgi-bin/client_search_cp",
+        "method": "GET",
+        "headers": {
+          "Referer": "https://y.qq.com"
+        }
+      },
+      "lyricsLegacy": {
+        "url": "https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg",
+        "method": "GET",
+        "headers": {
+          "Referer": "https://y.qq.com"
+        }
+      }
+    },
+    "netease": {
+      "search": {
+        "url": "https://music.163.com/api/search/get/web",
+        "method": "POST",
+        "headers": {
+          "Referer": "https://music.163.com"
+        }
+      },
+      "lyrics": {
+        "url": "https://music.163.com/api/song/lyric",
+        "method": "GET",
+        "headers": {
+          "Referer": "https://music.163.com"
+        }
+      }
+    },
+    "kugou": {
+      "search": {
+        "url": "https://mobilecdn.kugou.com/api/v3/search/song",
+        "method": "GET",
+        "headers": {}
+      },
+      "lyricsSearch": {
+        "url": "https://krcs.kugou.com/search",
+        "method": "GET",
+        "headers": {}
+      },
+      "lyricsDownload": {
+        "url": "https://lyrics.kugou.com/download",
+        "method": "GET",
+        "headers": {}
+      }
+    }
+  },
+  "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"
+}
