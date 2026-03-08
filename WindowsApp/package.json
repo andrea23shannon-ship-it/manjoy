@@ -1,7 +1,12 @@
 {
   "name": "lyricscaster-windows",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "LyricsCaster 歌词投屏 Windows版",
+  "author": "ManJoy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andrea23shannon-ship-it/manjoy.git"
+  },
   "main": "dist/main/index.js",
   "scripts": {
     "build:main": "node ./node_modules/typescript/bin/tsc -p tsconfig.main.json",
@@ -31,6 +36,7 @@
   "build": {
     "appId": "com.lyricscaster.windows",
     "productName": "LyricsCaster",
+    "publish": null,
     "directories": {
       "output": "release"
     },
