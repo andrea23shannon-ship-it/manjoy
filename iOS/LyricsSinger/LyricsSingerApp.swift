@@ -14,18 +14,42 @@ import SwiftUI
 @main
 struct LyricsSingerApp: App {
     @StateObject private var client = MultipeerClient()
+    @StateObject private var wsClient = WebSocketClient()
     @StateObject private var searchService = LyricsSearchService()
+    @StateObject private var apiConfigManager = APIConfigManager.shared
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(client)
+                .environmentObject(wsClient)
                 .environmentObject(searchService)
+                .environmentObject(apiConfigManager)
                 .onAppear {
-                    // 自动开始搜索Mac
+                    // 注入API配置管理器到搜索服务
+                    searchService.configManager = apiConfigManager
+
+                    // 注册Mac→iOS消息回调（接收API配置推送）
+                    client.onMessageReceived = { message in
+                        if message.type == .apiConfigUpdate {
+                            if let payload = try? JSONDecoder().decode(APIConfigPayload.self, from: message.payload) {
+                                print("[LyricsSinger] 收到Mac推送的API配置 v\(payload.version)")
+                                apiConfigManager.applyPushedConfig(payload: payload)
+                            }
+                        }
+                    }
+
+                    // 自动开始搜索Mac（MultipeerConnectivity）
                     client.startSearching()
+                    // 自动开始搜索Windows（WebSocket/Bonjour）
+                    wsClient.startSearching()
                     // 保持屏幕常亮（歌手在台上需要一直看）
                     UIApplication.shared.isIdleTimerDisabled = true
+
+                    // 启动时拉取远程配置
+                    Task {
+                        await apiConfigManager.fetchRemoteConfig()
+                    }
                 }
                 .onDisappear {
                     UIApplication.shared.isIdleTimerDisabled = false
@@ -37,6 +61,7 @@ struct LyricsSingerApp: App {
 // MARK: - 主界面
 struct ContentView: View {
     @EnvironmentObject var client: MultipeerClient
+    @EnvironmentObject var wsClient: WebSocketClient
     @EnvironmentObject var searchService: LyricsSearchService
     @State private var selectedSong: SongInfo?
     @State private var loadedLyrics: [LyricLine] = []
@@ -45,9 +70,10 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // 顶部：Mac连接状态
+                // 顶部：连接状态（Mac + Windows）
                 ConnectionView()
                     .environmentObject(client)
+                    .environmentObject(wsClient)
                     .padding(.horizontal)
                     .padding(.top, 8)
 
@@ -59,11 +85,13 @@ struct ContentView: View {
                 )
                 .environmentObject(searchService)
                 .environmentObject(client)
+                .environmentObject(wsClient)
             }
             .navigationDestination(isPresented: $showLyricsView) {
                 if let song = selectedSong {
                     SingerLyricsView(song: song, lyrics: $loadedLyrics)
                         .environmentObject(client)
+                        .environmentObject(wsClient)
                         .navigationBarBackButtonHidden(false)
                         .toolbar {
                             ToolbarItem(placement: .principal) {

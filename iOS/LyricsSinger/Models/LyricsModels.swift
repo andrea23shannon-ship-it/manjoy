@@ -48,6 +48,7 @@ enum PeerMessageType: String, Codable {
     case playbackSync
     case lineChanged
     case playbackControl
+    case apiConfigUpdate  // Mac→iOS: 推送API配置更新
 }
 
 struct PeerMessage: Codable {
@@ -101,6 +102,20 @@ enum PlaybackAction: String, Codable {
 
 struct PlaybackControlPayload: Codable {
     let action: PlaybackAction
+}
+
+// MARK: - API配置更新载荷
+struct APIConfigPayload: Codable {
+    let configJSON: String  // 完整的 api_config.json 内容
+    let version: Int
+}
+
+extension PeerMessage {
+    static func apiConfigUpdate(configJSON: String, version: Int) -> PeerMessage {
+        let data = APIConfigPayload(configJSON: configJSON, version: version)
+        let payload = (try? JSONEncoder().encode(data)) ?? Data()
+        return PeerMessage(type: .apiConfigUpdate, payload: payload)
+    }
 }
 
 // MARK: - LRC解析器

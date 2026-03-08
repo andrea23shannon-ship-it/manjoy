@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "lastUpdated": "2026-03-08",
   "apis": {
     "qqMusic": {
@@ -11,7 +11,13 @@
           "Referer": "https://y.qq.com"
         },
         "module": "music.search.SearchCgiService",
-        "apiMethod": "DoSearchForQQMusicDesktop"
+        "apiMethod": "DoSearchForQQMusicDesktop",
+        "comm": {
+          "uin": 0,
+          "format": "json",
+          "ct": 19,
+          "cv": 1859
+        }
       },
       "lyrics": {
         "url": "https://u.y.qq.com/cgi-bin/musicu.fcg",
@@ -21,7 +27,13 @@
           "Referer": "https://y.qq.com"
         },
         "module": "music.musichallSong.PlayLyricInfo",
-        "apiMethod": "GetPlayLyricInfo"
+        "apiMethod": "GetPlayLyricInfo",
+        "comm": {
+          "uin": 0,
+          "format": "json",
+          "ct": 19,
+          "cv": 1859
+        }
       },
       "searchLegacy": {
         "url": "https://c.y.qq.com/soso/fcgi-bin/client_search_cp",
@@ -44,6 +56,9 @@
         "method": "POST",
         "headers": {
           "Referer": "https://music.163.com"
+        },
+        "params": {
+          "type": "1"
         }
       },
       "lyrics": {
@@ -51,6 +66,10 @@
         "method": "GET",
         "headers": {
           "Referer": "https://music.163.com"
+        },
+        "params": {
+          "lv": "1",
+          "tv": "1"
         }
       }
     },
@@ -58,19 +77,34 @@
       "search": {
         "url": "https://mobilecdn.kugou.com/api/v3/search/song",
         "method": "GET",
-        "headers": {}
+        "headers": {},
+        "params": {
+          "format": "json"
+        }
       },
       "lyricsSearch": {
         "url": "https://krcs.kugou.com/search",
         "method": "GET",
-        "headers": {}
+        "headers": {},
+        "params": {
+          "ver": "1",
+          "man": "yes",
+          "client": "mobi"
+        }
       },
       "lyricsDownload": {
         "url": "https://lyrics.kugou.com/download",
         "method": "GET",
-        "headers": {}
+        "headers": {},
+        "params": {
+          "ver": "1",
+          "client": "pc",
+          "fmt": "lrc",
+          "charset": "utf8"
+        }
       }
     }
   },
-  "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"
+  "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+  "userAgentMac": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
 }

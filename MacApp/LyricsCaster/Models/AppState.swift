@@ -377,6 +377,10 @@ class AppState: ObservableObject {
                     self.addLog("[错误] playbackControl 解码失败: \(error.localizedDescription)")
                     print("[AppState] playbackControl 解码失败: \(error)")
                 }
+
+            case .apiConfigUpdate:
+                // API配置更新由 APIConfigManager 处理，AppState 不需要处理
+                break
             }
         }
     }

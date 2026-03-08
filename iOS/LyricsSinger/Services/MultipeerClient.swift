@@ -19,6 +19,9 @@ class MultipeerClient: NSObject, ObservableObject {
     @Published var statusMessage = "未连接"
     @Published var discoveredPeers: [MCPeerID] = []
 
+    /// Mac→iOS 消息回调
+    var onMessageReceived: ((PeerMessage) -> Void)?
+
     override init() {
         self.myPeerID = MCPeerID(displayName: UIDevice.current.name)
         super.init()
@@ -124,8 +127,14 @@ extension MultipeerClient: MCSessionDelegate {
     }
 
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        // Mac→手机的消息（如样式同步等，当前版本暂不处理）
         print("[MultipeerClient] 收到Mac消息: \(data.count) bytes")
+        // 解码 PeerMessage 并回调
+        if let message = try? JSONDecoder().decode(PeerMessage.self, from: data) {
+            print("[MultipeerClient] 解码Mac消息: \(message.type.rawValue)")
+            DispatchQueue.main.async { [weak self] in
+                self?.onMessageReceived?(message)
+            }
+        }
     }
 
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {}

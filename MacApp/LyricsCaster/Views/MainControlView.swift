@@ -8,6 +8,7 @@ struct MainControlView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var server: MultipeerServer
     @EnvironmentObject var screenManager: ScreenManager
+    @EnvironmentObject var apiConfigManager: APIConfigManager
     @State private var selectedTab = 0
     @State private var showStyleEditor = false
     @State private var showStandbyManager = false
@@ -148,6 +149,11 @@ struct MainControlView: View {
             .buttonStyle(.plain)
             .padding(.horizontal)
             .padding(.bottom, 8)
+
+            // API 配置管理卡片
+            apiConfigCard
+                .padding(.horizontal)
+                .padding(.bottom, 8)
 
             Divider()
 
@@ -501,10 +507,108 @@ struct MainControlView: View {
         }
     }
 
+    // MARK: - API 配置管理卡片
+    private var apiConfigCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: "antenna.radiowaves.left.and.right")
+                    .foregroundColor(.teal)
+                    .font(.title3)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("API 接口管理")
+                        .font(.subheadline.weight(.medium))
+                    if apiConfigManager.configVersion > 0 {
+                        Text("v\(apiConfigManager.configVersion) · \(apiConfigManager.lastUpdated)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    } else {
+                        Text("未加载配置")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
+                }
+
+                Spacer()
+
+                // 检测按钮
+                Button(action: {
+                    Task { await apiConfigManager.checkAllAPIs() }
+                }) {
+                    if apiConfigManager.isChecking {
+                        ProgressView()
+                            .scaleEffect(0.7)
+                    } else {
+                        Label("检测", systemImage: "stethoscope")
+                    }
+                }
+                .disabled(apiConfigManager.isChecking)
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+
+                // 推送按钮
+                Button(action: {
+                    apiConfigManager.pushConfigToPhone()
+                }) {
+                    if apiConfigManager.isPushing {
+                        ProgressView()
+                            .scaleEffect(0.7)
+                    } else {
+                        Label("推送到手机", systemImage: "iphone.and.arrow.forward")
+                    }
+                }
+                .disabled(server.connectedPeers.isEmpty || apiConfigManager.isPushing || apiConfigManager.configJSON.isEmpty)
+                .buttonStyle(.borderedProminent)
+                .tint(.teal)
+                .controlSize(.small)
+            }
+
+            // 健康检测结果（仅在检测过后显示）
+            if apiConfigManager.lastCheckTime != nil {
+                VStack(spacing: 4) {
+                    HStack(spacing: 12) {
+                        apiStatusDot("QQ搜索", status: apiConfigManager.qqMusicSearchOK)
+                        apiStatusDot("QQ歌词", status: apiConfigManager.qqMusicLyricsOK)
+                        apiStatusDot("网易搜索", status: apiConfigManager.neteaseSearchOK)
+                        apiStatusDot("网易歌词", status: apiConfigManager.neteaseLyricsOK)
+                        apiStatusDot("酷狗搜索", status: apiConfigManager.kugouSearchOK)
+                        apiStatusDot("酷狗歌词", status: apiConfigManager.kugouLyricsOK)
+                    }
+
+                    if let time = apiConfigManager.lastCheckTime {
+                        Text("最近检测: \(formatCheckTime(time))")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+        }
+        .padding(10)
+        .background(RoundedRectangle(cornerRadius: 10).fill(.ultraThinMaterial))
+    }
+
+    @ViewBuilder
+    private func apiStatusDot(_ name: String, status: Bool?) -> some View {
+        HStack(spacing: 3) {
+            Circle()
+                .fill(status == nil ? Color.gray : (status! ? Color.green : Color.red))
+                .frame(width: 6, height: 6)
+            Text(name)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+        }
+    }
+
     // MARK: - 辅助
     private func formatTime(_ seconds: Double) -> String {
         let mins = Int(seconds) / 60
         let secs = Int(seconds) % 60
         return String(format: "%d:%02d", mins, secs)
+    }
+
+    private func formatCheckTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        return formatter.string(from: date)
     }
 }

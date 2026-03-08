@@ -27,12 +27,13 @@ struct SongInfo: Codable {
     let duration: Double?  // 总时长（秒）
 }
 
-// MARK: - 手机→Mac 消息协议
+// MARK: - 消息协议（双向：手机↔Mac）
 enum PeerMessageType: String, Codable {
     case songLoaded       // 歌曲加载完成，附带完整歌词
     case playbackSync     // 播放进度同步
     case lineChanged      // 当前行变化
     case playbackControl  // 播放/暂停/停止
+    case apiConfigUpdate  // Mac→iOS: 推送API配置更新
 }
 
 struct PeerMessage: Codable {
@@ -87,6 +88,20 @@ enum PlaybackAction: String, Codable {
 
 struct PlaybackControlPayload: Codable {
     let action: PlaybackAction
+}
+
+// MARK: - API配置更新载荷
+struct APIConfigPayload: Codable {
+    let configJSON: String  // 完整的 api_config.json 内容
+    let version: Int
+}
+
+extension PeerMessage {
+    static func apiConfigUpdate(configJSON: String, version: Int) -> PeerMessage {
+        let data = APIConfigPayload(configJSON: configJSON, version: version)
+        let payload = (try? JSONEncoder().encode(data)) ?? Data()
+        return PeerMessage(type: .apiConfigUpdate, payload: payload)
+    }
 }
 
 // MARK: - 歌词样式配置

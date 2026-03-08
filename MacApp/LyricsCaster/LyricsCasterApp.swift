@@ -16,6 +16,7 @@ struct LyricsCasterApp: App {
     @StateObject private var appState = AppState()
     @StateObject private var server = MultipeerServer()
     @StateObject private var screenManager = ScreenManager()
+    @StateObject private var apiConfigManager = APIConfigManager()
     // FontManager.shared 在 init 时自动加载并注册已导入的字体
     private let fontManager = FontManager.shared
 
@@ -26,9 +27,11 @@ struct LyricsCasterApp: App {
                 .environmentObject(appState)
                 .environmentObject(server)
                 .environmentObject(screenManager)
+                .environmentObject(apiConfigManager)
                 .frame(minWidth: 600, minHeight: 450)
                 .onAppear {
                     setupServer()
+                    setupAPIConfig()
                 }
         }
         .defaultSize(width: 900, height: 600)
@@ -50,5 +53,19 @@ struct LyricsCasterApp: App {
         // 自动开始广播
         server.startAdvertising()
         appState.addLog("Mac端已启动，等待手机连接...")
+    }
+
+    private func setupAPIConfig() {
+        // 将 MultipeerServer 引用注入 APIConfigManager（用于推送配置）
+        apiConfigManager.server = server
+
+        // 启动时自动拉取远程配置并检测API健康状态
+        Task {
+            await apiConfigManager.fetchRemoteConfig()
+            await apiConfigManager.checkAllAPIs()
+            await MainActor.run {
+                appState.addLog("API配置已加载 v\(apiConfigManager.configVersion)，健康检测完成")
+            }
+        }
     }
 }
