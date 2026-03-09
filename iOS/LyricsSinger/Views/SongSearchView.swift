@@ -45,7 +45,7 @@ struct SongSearchView: View {
                 }
                 Spacer()
             } else if searchService.searchResults.isEmpty {
-                // 没有搜索结果时显示最近搜索
+                // 没有搜索结果时显示最近搜索 + 演示模式
                 if !recentSearches.isEmpty {
                     recentSearchList
                 } else {
@@ -61,6 +61,9 @@ struct SongSearchView: View {
                             .foregroundColor(.secondary.opacity(0.6))
                     }
                     Spacer()
+
+                    // 演示模式入口
+                    demoModeSection
                 }
             } else {
                 resultsList
@@ -343,6 +346,74 @@ struct SongSearchView: View {
         case .qqMusic: return .green
         case .kugou: return .blue
         }
+    }
+
+    // MARK: - 演示模式
+    private var demoModeSection: some View {
+        VStack(spacing: 12) {
+            Divider()
+                .padding(.horizontal)
+
+            HStack {
+                Image(systemName: "play.rectangle.fill")
+                    .foregroundColor(.teal)
+                Text("演示模式")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundColor(.secondary)
+                Spacer()
+                Text("无需连接电脑即可体验")
+                    .font(.caption)
+                    .foregroundColor(.secondary.opacity(0.6))
+            }
+            .padding(.horizontal, 16)
+
+            ForEach(Array(DemoDataProvider.demoSongs.enumerated()), id: \.offset) { index, item in
+                Button(action: { selectDemoSong(index: index) }) {
+                    HStack(spacing: 12) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.teal.opacity(0.15))
+                                .frame(width: 40, height: 40)
+                            Image(systemName: "music.note")
+                                .foregroundColor(.teal)
+                        }
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(item.song.title)
+                                .font(.body.weight(.medium))
+                                .foregroundColor(.primary)
+                            Text(item.song.artist)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        Text("演示")
+                            .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(Color.teal.opacity(0.15))
+                            .foregroundColor(.teal)
+                            .cornerRadius(4)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+            }
+
+            Spacer().frame(height: 16)
+        }
+    }
+
+    private func selectDemoSong(index: Int) {
+        let demoItem = DemoDataProvider.demoSongs[index]
+        selectedSong = demoItem.song
+        loadedLyrics = demoItem.lyrics
+        // 不发送到Mac（演示模式，可能未连接）
+        if client.isConnected {
+            client.sendSongLoaded(song: demoItem.song, lyrics: demoItem.lyrics)
+        }
+        showLyricsView = true
     }
 }
 

@@ -72,22 +72,46 @@ class LyricsSearchService: ObservableObject {
 
         let source = await MainActor.run { selectedSource }
         var results: [SearchResult] = []
+        var searchError: String?
 
-        switch source {
-        case .qqMusic:
-            results = await searchQQMusic(keyword: keyword)
-        case .netease:
-            results = await searchNetease(keyword: keyword)
-        case .kugou:
-            results = await searchKugou(keyword: keyword)
+        do {
+            switch source {
+            case .qqMusic:
+                results = await searchQQMusic(keyword: keyword)
+            case .netease:
+                results = await searchNetease(keyword: keyword)
+            case .kugou:
+                results = await searchKugou(keyword: keyword)
+            }
         }
 
         DispatchQueue.main.async {
             self.searchResults = results
             self.isSearching = false
             if results.isEmpty {
-                self.error = "未找到相关歌曲"
+                if let err = searchError {
+                    self.error = err
+                } else {
+                    self.error = "未找到相关歌曲，试试切换其他音乐源"
+                }
             }
+        }
+    }
+
+    /// 友好的网络错误提示
+    private func friendlyErrorMessage(for error: Error, source: String) -> String {
+        let nsError = error as NSError
+        switch nsError.code {
+        case NSURLErrorNotConnectedToInternet:
+            return "网络未连接，请检查WiFi设置"
+        case NSURLErrorTimedOut:
+            return "\(source)接口响应超时，请稍后重试"
+        case NSURLErrorCannotConnectToHost, NSURLErrorCannotFindHost:
+            return "\(source)服务暂时不可用，请尝试其他音乐源"
+        case NSURLErrorNetworkConnectionLost:
+            return "网络连接中断，请重试"
+        default:
+            return "\(source)搜索出错，请尝试其他音乐源"
         }
     }
 
@@ -188,6 +212,9 @@ class LyricsSearchService: ObservableObject {
             }
         } catch {
             print("[LyricsSearch] 网易云搜索失败: \(error)")
+            DispatchQueue.main.async {
+                self.error = self.friendlyErrorMessage(for: error, source: "网易云")
+            }
         }
         return []
     }
@@ -259,6 +286,7 @@ class LyricsSearchService: ObservableObject {
             }
         } catch {
             print("[LyricsSearch] QQ音乐搜索(新版)失败: \(error)")
+            // 不在这里设error，先尝试旧版接口
         }
 
         // 回退到旧版接口
@@ -318,6 +346,9 @@ class LyricsSearchService: ObservableObject {
             }
         } catch {
             print("[LyricsSearch] QQ音乐搜索(旧版)失败: \(error)")
+            DispatchQueue.main.async {
+                self.error = self.friendlyErrorMessage(for: error, source: "QQ音乐")
+            }
         }
         return []
     }
@@ -392,6 +423,9 @@ class LyricsSearchService: ObservableObject {
             }
         } catch {
             print("[LyricsSearch] 酷狗搜索失败: \(error)")
+            DispatchQueue.main.async {
+                self.error = self.friendlyErrorMessage(for: error, source: "酷狗")
+            }
         }
         return []
     }
