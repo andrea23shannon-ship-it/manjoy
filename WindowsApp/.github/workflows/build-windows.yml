@@ -1,0 +1,74 @@
+name: Build Windows EXE
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build main process (TypeScript)
+        run: npx tsc -p tsconfig.main.json
+
+      - name: Build renderer (Vite)
+        run: npx vite build
+
+      - name: Package Windows EXE
+        run: npx electron-builder --win --publish never
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LyricsCaster-Windows-Setup
+          path: |
+            release/*.exe
+            dist/*.exe
+          if-no-files-found: warn
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: LyricsCaster Windows v1.0.${{ github.run_number }}
+          body: |
+            ## LyricsCaster 歌词投屏 Windows版
+
+            ### 安装方法
+            1. 下载下方的 .exe 安装文件
+            2. 双击运行安装
+            3. 安装完成后启动 LyricsCaster
+            4. 确保手机和电脑在同一个WiFi网络
+            5. iOS端会自动发现并连接
+
+            ### 功能
+            - 14种歌词动画效果
+            - 外接屏幕投影
+            - 与iOS LyricsSinger手机端实时同步
+            - 5个主题预设
+            - 待机图片管理
+          files: |
+            release/*.exe
+            dist/*.exe
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

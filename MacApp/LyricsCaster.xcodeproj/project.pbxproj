@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18A97B782F5DBB5400FF0E7D /* APIConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A97B772F5DBB5400FF0E7D /* APIConfigManager.swift */; };
+		18A97B7E2F5DBF9400FF0E7D /* SettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A97B7D2F5DBF9400FF0E7D /* SettingsSheet.swift */; };
 		AA1B2C3D4E5F6A7B8C9D0E01 /* LyricsCasterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1B2C3D4E5F6A7B8C9D0E01 /* LyricsCasterApp.swift */; };
 		AA1B2C3D4E5F6A7B8C9D0E02 /* LyricsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1B2C3D4E5F6A7B8C9D0E02 /* LyricsModels.swift */; };
 		AA1B2C3D4E5F6A7B8C9D0E03 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1B2C3D4E5F6A7B8C9D0E03 /* AppState.swift */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		18A97B772F5DBB5400FF0E7D /* APIConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfigManager.swift; sourceTree = "<group>"; };
+		18A97B7D2F5DBF9400FF0E7D /* SettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSheet.swift; sourceTree = "<group>"; };
 		BB1B2C3D4E5F6A7B8C9D0E01 /* LyricsCasterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsCasterApp.swift; sourceTree = "<group>"; };
 		BB1B2C3D4E5F6A7B8C9D0E02 /* LyricsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsModels.swift; sourceTree = "<group>"; };
 		BB1B2C3D4E5F6A7B8C9D0E03 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -49,7 +53,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DD1B2C3D4E5F6A7B8C9D0E01 /* = */ = {
+		DD1B2C3D4E5F6A7B8C9D0E01 = {
 			isa = PBXGroup;
 			children = (
 				DD1B2C3D4E5F6A7B8C9D0E02 /* LyricsCaster */,
@@ -83,6 +87,7 @@
 		DD1B2C3D4E5F6A7B8C9D0E04 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				18A97B772F5DBB5400FF0E7D /* APIConfigManager.swift */,
 				BB1B2C3D4E5F6A7B8C9D0E04 /* MultipeerServer.swift */,
 				BB1B2C3D4E5F6A7B8C9D0E11 /* ScreenManager.swift */,
 				BB1B2C3D4E5F6A7B8C9D0E13 /* FontManager.swift */,
@@ -93,6 +98,7 @@
 		DD1B2C3D4E5F6A7B8C9D0E05 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				18A97B7D2F5DBF9400FF0E7D /* SettingsSheet.swift */,
 				BB1B2C3D4E5F6A7B8C9D0E05 /* MainControlView.swift */,
 				BB1B2C3D4E5F6A7B8C9D0E06 /* StyleEditorView.swift */,
 				BB1B2C3D4E5F6A7B8C9D0E07 /* LyricsProjectionView.swift */,
@@ -185,6 +191,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18A97B7E2F5DBF9400FF0E7D /* SettingsSheet.swift in Sources */,
 				AA1B2C3D4E5F6A7B8C9D0E01 /* LyricsCasterApp.swift in Sources */,
 				AA1B2C3D4E5F6A7B8C9D0E02 /* LyricsModels.swift in Sources */,
 				AA1B2C3D4E5F6A7B8C9D0E03 /* AppState.swift in Sources */,
@@ -194,6 +201,7 @@
 				AA1B2C3D4E5F6A7B8C9D0E07 /* LyricsProjectionView.swift in Sources */,
 				AA1B2C3D4E5F6A7B8C9D0E09 /* ScreenManager.swift in Sources */,
 				AA1B2C3D4E5F6A7B8C9D0E10 /* StandbyImageSheet.swift in Sources */,
+				18A97B782F5DBB5400FF0E7D /* APIConfigManager.swift in Sources */,
 				AA1B2C3D4E5F6A7B8C9D0E11 /* FontManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -326,7 +334,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
 	};
 	rootObject = EE1B2C3D4E5F6A7B8C9D0E02 /* Project object */;
 }

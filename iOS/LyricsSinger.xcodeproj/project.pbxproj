@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18A97B742F5DBAFF00FF0E7D /* APIConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A97B732F5DBAFF00FF0E7D /* APIConfigManager.swift */; };
+		18A97B762F5DBB0600FF0E7D /* WebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A97B752F5DBB0600FF0E7D /* WebSocketClient.swift */; };
 		AA2B3C4D5E6F7A8B9C0D1E01 /* LyricsSingerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2B3C4D5E6F7A8B9C0D1E01 /* LyricsSingerApp.swift */; };
 		AA2B3C4D5E6F7A8B9C0D1E02 /* LyricsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2B3C4D5E6F7A8B9C0D1E02 /* LyricsModels.swift */; };
 		AA2B3C4D5E6F7A8B9C0D1E03 /* MultipeerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2B3C4D5E6F7A8B9C0D1E03 /* MultipeerClient.swift */; };
@@ -18,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		18A97B732F5DBAFF00FF0E7D /* APIConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfigManager.swift; sourceTree = "<group>"; };
+		18A97B752F5DBB0600FF0E7D /* WebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketClient.swift; sourceTree = "<group>"; };
 		BB2B3C4D5E6F7A8B9C0D1E01 /* LyricsSingerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsSingerApp.swift; sourceTree = "<group>"; };
 		BB2B3C4D5E6F7A8B9C0D1E02 /* LyricsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsModels.swift; sourceTree = "<group>"; };
 		BB2B3C4D5E6F7A8B9C0D1E03 /* MultipeerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerClient.swift; sourceTree = "<group>"; };
@@ -74,6 +78,8 @@
 		DD2B3C4D5E6F7A8B9C0D1E04 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				18A97B752F5DBB0600FF0E7D /* WebSocketClient.swift */,
+				18A97B732F5DBAFF00FF0E7D /* APIConfigManager.swift */,
 				BB2B3C4D5E6F7A8B9C0D1E03 /* MultipeerClient.swift */,
 				BB2B3C4D5E6F7A8B9C0D1E04 /* LyricsSearchService.swift */,
 			);
@@ -178,6 +184,8 @@
 				AA2B3C4D5E6F7A8B9C0D1E02 /* LyricsModels.swift in Sources */,
 				AA2B3C4D5E6F7A8B9C0D1E03 /* MultipeerClient.swift in Sources */,
 				AA2B3C4D5E6F7A8B9C0D1E04 /* LyricsSearchService.swift in Sources */,
+				18A97B742F5DBAFF00FF0E7D /* APIConfigManager.swift in Sources */,
+				18A97B762F5DBB0600FF0E7D /* WebSocketClient.swift in Sources */,
 				AA2B3C4D5E6F7A8B9C0D1E05 /* SongSearchView.swift in Sources */,
 				AA2B3C4D5E6F7A8B9C0D1E06 /* SingerLyricsView.swift in Sources */,
 				AA2B3C4D5E6F7A8B9C0D1E07 /* ConnectionView.swift in Sources */,

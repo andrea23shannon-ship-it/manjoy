@@ -22,7 +22,7 @@ struct LyricsCasterApp: App {
 
     var body: some Scene {
         // 主控制窗口（Mac主屏幕上操作）
-        WindowGroup("LyricsCaster 歌词投屏") {
+        WindowGroup("民谣棠歌词助手") {
             MainControlView()
                 .environmentObject(appState)
                 .environmentObject(server)

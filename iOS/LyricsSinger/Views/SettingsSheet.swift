@@ -148,7 +148,7 @@ struct SettingsSheet: View {
             Divider()
 
             HStack {
-                Text("LyricsCaster 歌词投屏")
+                Text("民谣棠歌词助手")
                     .font(.subheadline)
                 Spacer()
                 Text("v1.0")

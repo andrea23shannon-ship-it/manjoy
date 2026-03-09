@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>LyricsSinger需要使用本地网络来发现并连接同一WiFi下的Mac/Windows投影端，实时发送歌词数据进行投屏显示</string>
+	<string>民谣棠歌词助手需要使用本地网络来发现并连接同一WiFi下的Mac/Windows投影端，实时发送歌词数据进行投屏显示</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_lyricscaster._tcp</string>
@@ -16,7 +16,7 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>CFBundleDisplayName</key>
-	<string>歌词投屏</string>
+	<string>民谣棠歌词助手</string>
 	<key>UIRequiresFullScreen</key>
 	<true/>
 	<key>UISupportedInterfaceOrientations</key>

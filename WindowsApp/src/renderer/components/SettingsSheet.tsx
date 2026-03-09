@@ -476,7 +476,7 @@ const SettingsSheet: React.FC<SettingsSheetProps> = ({ onClose, isPhoneConnected
             <div style={configInfoStyle}>
               <div style={configItemStyle}>
                 <div style={configLabelStyle}>应用名称</div>
-                <div style={configValueStyle}>LyricsCaster 歌词投屏</div>
+                <div style={configValueStyle}>民谣棠歌词助手</div>
               </div>
               <div style={configItemStyle}>
                 <div style={configLabelStyle}>版本号</div>

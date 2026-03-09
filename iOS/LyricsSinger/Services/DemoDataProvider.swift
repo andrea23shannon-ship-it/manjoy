@@ -40,7 +40,7 @@ struct DemoDataProvider {
     // MARK: - 歌曲2: 演示歌曲（原创示例歌词）
     static let demoSong2 = SongInfo(
         title: "舞台之光",
-        artist: "LyricsCaster Demo",
+        artist: "民谣棠演示",
         album: "演示专辑",
         duration: 80.0
     )
@@ -61,7 +61,7 @@ struct DemoDataProvider {
         LyricLine(time: 44.0, text: "一起唱 一起感受"),
         LyricLine(time: 48.0, text: "这就是音乐的力量"),
         LyricLine(time: 52.0, text: ""),
-        LyricLine(time: 54.0, text: "LyricsCaster"),
+        LyricLine(time: 54.0, text: "民谣棠歌词助手"),
         LyricLine(time: 58.0, text: "让歌词飞到大屏幕"),
         LyricLine(time: 62.0, text: "让音乐连接你和我")
     ]

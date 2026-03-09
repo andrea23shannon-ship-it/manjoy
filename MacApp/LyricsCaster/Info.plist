@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>LyricsCaster需要使用本地网络来连接歌手手机，接收实时歌词数据</string>
+	<string>民谣棠歌词助手需要使用本地网络来连接歌手手机，接收实时歌词数据</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_lyricscaster._tcp</string>

@@ -1,7 +1,7 @@
 {
   "name": "lyricscaster-windows",
   "version": "1.1.0",
-  "description": "LyricsCaster 歌词投屏 Windows版",
+  "description": "民谣棠歌词助手 Windows版",
   "author": "ManJoy",
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
   },
   "build": {
     "appId": "com.lyricscaster.windows",
-    "productName": "LyricsCaster",
+    "productName": "民谣棠歌词助手",
     "publish": null,
     "directories": {
       "output": "release"
@@ -47,7 +47,7 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "shortcutName": "LyricsCaster 歌词投屏"
+      "shortcutName": "民谣棠歌词助手"
     },
     "files": [
       "dist/**/*"
